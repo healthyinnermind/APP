@@ -1,8 +1,4 @@
 <!DOCTYPE html>
-
-<!-- Legal Footnote: This content is subject to copyright and should not be reproduced without permission. -->
-<!-- Written and created by Thomas John-Michael de Beer, feel free to contact me via tjdebeer@gmail.com  -->
-
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -10,7 +6,7 @@
   <title>innermind.health</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
-<style>
+  <style>
 :root{--bg:#f6f8fb;--panel:#fff;--muted:#334155;--accent:#2563eb;--accent-hover:#1d4ed8;--glass:transparent;--shadow:0 8px 30px rgba(16,24,40,0.06);--shadow-lg:0 20px 60px rgba(16,24,40,0.12);--radius:14px;--border:#e2e8f0;--success:#10b981;--danger:#ef4444}
 [data-theme="dark"]{--bg:#071026;--panel:#0f1724;--muted:#cbd5e1;--accent:#60a5fa;--accent-hover:#3b82f6;--glass:transparent;--shadow:0 14px 40px rgba(2,6,23,0.6);--shadow-lg:0 20px 60px rgba(2,6,23,0.8);--border:#1e293b;--success:#34d399;--danger:#f87171}
 *{box-sizing:border-box;user-select:none}textarea,input,.entry .content{user-select:text}*:focus{outline:none!important}button:focus,a:focus,.switch:focus{outline:none!important}
@@ -41,6 +37,7 @@ main{min-height:100vh;display:flex;align-items:center;justify-content:center;pad
 .pill:focus-within{border-color:var(--accent)}
 textarea#entryText{width:100%;min-height:60px;max-height:360px;border:0;outline:none;background:transparent;color:var(--muted);font-size:16px;padding:0;resize:none;font-weight:400;line-height:1.6;font-family:inherit}
 textarea#entryText::placeholder{color:var(--muted);opacity:.5}
+input#entryName{border:0;background:transparent;color:var(--muted);font-size:15px;padding:0 8px;min-width:120px}
 .pill .mic-btn{width:46px;height:46px;border-radius:999px;background:transparent;display:grid;place-items:center;cursor:pointer;transition:all .2s ease;border:0;flex-shrink:0}
 .pill .mic-btn:hover .material-icons{color:var(--accent-hover)}.pill .mic-btn:hover{transform:scale(1.15)}.pill .mic-btn.recording{background:var(--danger);animation:pulse 1.5s infinite}.pill .mic-btn.recording .material-icons{color:#fff}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(239,68,68,.4)}50%{box-shadow:0 0 0 8px rgba(239,68,68,0)}}
@@ -77,11 +74,8 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
 @keyframes slideInRight{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}.toast.show{display:flex}.toast .material-icons{color:var(--success)}
 .empty-state{text-align:center;padding:60px 20px;color:var(--muted);opacity:.7}.empty-state .material-icons{font-size:64px;opacity:.3;margin-bottom:12px}.empty-state p{font-size:16px;font-weight:500}
 @media(max-width:520px){.center-row{gap:20px}.center-row .action .material-icons{font-size:40px}textarea#entryText{min-height:50px}.logo{font-size:1.2rem}.header-actions{gap:8px}.icon-btn{width:44px;height:44px}}
-</style>
-
-
+  </style>
 </head>
-
 <body data-theme="light">
   <header>
     <div class="logo">innermind.health</div>
@@ -96,6 +90,7 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
       </div>
     </div>
   </header>
+
   <main>
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px;width:100%">
       <div class="center-row" role="toolbar" aria-label="Main actions">
@@ -110,9 +105,11 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
           <span id="journalBadge" class="notification-badge" style="display:none">0</span>
         </button>
       </div>
-      <div id="moduleNew" class="module">
+
+      <div id="moduleNew" class="module" aria-hidden="true">
         <div class="pill" role="region" aria-label="New entry input">
-          <textarea id="entryText" placeholder="Please share . . ." aria-label="Entry text" rows="1"></textarea>
+          <input id="entryName" placeholder="Client name" aria-label="Client name" />
+          <textarea id="entryText" placeholder="Please share . . ." aria-label="Entry text" rows="3"></textarea>
           <button class="mic-btn" id="mic" title="Voice to text" aria-label="Microphone">
             <span class="material-icons">mic</span>
           </button>
@@ -121,7 +118,8 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
           </button>
         </div>
       </div>
-      <div id="moduleSearch" class="module">
+
+      <div id="moduleSearch" class="module" aria-hidden="true">
         <div class="pill" role="search" aria-label="Search entries">
           <input id="searchText" class="search-input" placeholder="Search your thoughts..." />
           <button id="clearSearch" title="Clear search" style="background:transparent;border:0;cursor:pointer;padding:8px;border-radius:8px;transition:background 0.2s ease">
@@ -129,12 +127,13 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
           </button>
         </div>
       </div>
+
       <div id="statsContainer" style="width:min(720px,92%);display:none"></div>
       <div id="entries" class="entries" aria-live="polite"></div>
     </div>
   </main>
 
-  <div id="settingsModal" class="modal">
+  <div id="settingsModal" class="modal" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title">Settings</div>
@@ -171,21 +170,15 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
         <div class="form-group">
           <label class="form-label">Data Management</label>
           <div style="display:flex;gap:12px;flex-wrap:wrap">
-            <button id="exportBtn" class="btn-secondary" style="flex:1">
-              <span class="material-icons" style="font-size:16px;vertical-align:middle;margin-right:4px">download</span>
-              Export
-            </button>
-            <button id="clearBtn" class="btn-secondary danger" style="flex:1">
-              <span class="material-icons" style="font-size:16px;vertical-align:middle;margin-right:4px">delete_forever</span>
-              Clear All
-            </button>
+            <button id="exportBtn" class="btn-secondary" style="flex:1">Export</button>
+            <button id="clearBtn" class="btn-secondary danger" style="flex:1">Clear All</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="editModal" class="modal">
+  <div id="editModal" class="modal" aria-hidden="true">
     <div class="modal-content">
       <div class="modal-header">
         <div class="modal-title">Edit Entry</div>
@@ -201,30 +194,39 @@ textarea#entryText::placeholder{color:var(--muted);opacity:.5}
     </div>
   </div>
 
-  <div id="toast" class="toast">
+  <div id="toast" class="toast" role="status" aria-live="polite">
     <span class="material-icons">check_circle</span>
     <span id="toastMessage">Entry saved!</span>
   </div>
 
-  <script>
+<script>
+/* Configuration */
+const GITHUB_API_CONTENTS = 'https://api.github.com/repos/tj-db/innermind/contents/ENTRIES';
+const CACHE_KEY = 'innermind.entries.cache.v3';
+const ETAG_KEY = 'innermind.entries.etag.v3';
+const PENDING_KEY = 'innermind.pending.v3';
+const SETTINGS_KEY = 'innermind.settings.v3';
+const THEME_KEY = 'innermind.theme.v3';
 
+const FORM_ID = '1FAIpQLSfDfwZrr7Wc3CrxxDSzS0zYc9T7ioBZ_sQyMbTht1psMrjfZg';
+const FORM_ENDPOINT = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+const FORM_FIELDS = { name: 'entry.2138377113', text: 'entry.1572331366' };
+const APPS_SCRIPT_PROXY = ''; // optional Apps Script proxy URL to avoid CORS
+
+/* Elements */
 const body = document.body;
 const btnNew = document.getElementById('btnNew');
 const btnSearch = document.getElementById('btnSearch');
 const btnJournal = document.getElementById('btnJournal');
 const journalBadge = document.getElementById('journalBadge');
-const exportBtn = document.getElementById('exportBtn');
-const clearBtn = document.getElementById('clearBtn');
 const moduleNew = document.getElementById('moduleNew');
 const moduleSearch = document.getElementById('moduleSearch');
 const moduleEntries = document.getElementById('entries');
-const statsContainer = document.getElementById('statsContainer');
 const entryText = document.getElementById('entryText');
-const mic = document.getElementById('mic');
-const save = document.getElementById('save');
+const entryName = document.getElementById('entryName');
+const saveBtn = document.getElementById('save');
 const searchText = document.getElementById('searchText');
 const clearSearch = document.getElementById('clearSearch');
-const themeSwitch = document.getElementById('themeSwitch');
 const settingsBtn = document.getElementById('settingsBtn');
 const settingsModal = document.getElementById('settingsModal');
 const closeSettings = document.getElementById('closeSettings');
@@ -234,265 +236,57 @@ const editText = document.getElementById('editText');
 const saveEdit = document.getElementById('saveEdit');
 const autoSaveCheck = document.getElementById('autoSaveCheck');
 const onlineSyncCheck = document.getElementById('onlineSyncCheck');
+const themeSwitch = document.getElementById('themeSwitch');
+const exportBtn = document.getElementById('exportBtn');
+const clearBtn = document.getElementById('clearBtn');
 const toast = document.getElementById('toast');
 const toastMessage = document.getElementById('toastMessage');
 
-// Configuration
-const API_BASE_URL = 'http://localhost:3000/api';
-const CACHE_KEY = 'innermind.entries.cache.v1';
-const PENDING_KEY = 'innermind.pending.v1';
-const THEME = 'innermind.theme.v1';
-const SETTINGS = 'innermind.settings.v1';
-const LAST_SYNC = 'innermind.lastSync.v1';
-
+/* State */
 let entries = [];
-let pendingOperations = [];
-let currentEditId = null;
+let pending = [];
 let settings = { autoSave: false, onlineSync: true };
-let isOnline = navigator.onLine;
-let syncInProgress = false;
 
+/* Utilities */
 const uid = () => 'id_' + Date.now() + '_' + Math.random().toString(36).slice(2,8);
+function showToast(msg) { toastMessage.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+function slugify(s) { return (s||'').toString().toLowerCase().replace(/\s+/g,'-').replace(/[^\w\-]+/g,'').replace(/\-\-+/g,'-').replace(/^-+/, '').replace(/-+$/, '').slice(0,60) || 'client'; }
 
-// ===============================
-// API Functions
-// ===============================
-
-async function apiRequest(endpoint, options = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers
-    },
-    ...options
-  };
-
-  try {
-    const response = await fetch(url, config);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  } catch (error) {
-    console.error('API request failed:', error);
-    throw error;
-  }
-}
-
-async function fetchEntriesFromAPI() {
-  return await apiRequest('/entries');
-}
-
-async function createEntryAPI(entry) {
-  return await apiRequest('/entries', {
-    method: 'POST',
-    body: JSON.stringify(entry)
-  });
-}
-
-async function updateEntryAPI(id, entry) {
-  return await apiRequest(`/entries/${id}`, {
-    method: 'PUT',
-    body: JSON.stringify(entry)
-  });
-}
-
-async function deleteEntryAPI(id) {
-  return await apiRequest(`/entries/${id}`, {
-    method: 'DELETE'
-  });
-}
-
-// ===============================
-// Storage & Cache Functions
-// ===============================
-
+/* Storage */
 function loadFromCache() {
-  try {
-    entries = JSON.parse(localStorage.getItem(CACHE_KEY)) || [];
-  } catch(e) {
-    entries = [];
-  }
+  try { entries = JSON.parse(localStorage.getItem(CACHE_KEY)) || []; } catch(e){ entries = []; }
 }
-
 function saveToCache() {
   localStorage.setItem(CACHE_KEY, JSON.stringify(entries));
   updateNotificationBadge();
 }
-
-function loadPendingOperations() {
-  try {
-    pendingOperations = JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
-  } catch(e) {
-    pendingOperations = [];
-  }
+function loadPending() {
+  try { pending = JSON.parse(localStorage.getItem(PENDING_KEY)) || []; } catch(e){ pending = []; }
+  updateNotificationBadge();
+}
+function savePending() {
+  localStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+  updateNotificationBadge();
+}
+function loadSettings() {
+  try { settings = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || { autoSave:false, onlineSync:true }; } catch(e){ settings = { autoSave:false, onlineSync:true }; }
+  autoSaveCheck.checked = settings.autoSave;
+  onlineSyncCheck.checked = settings.onlineSync;
+  const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
+  applyTheme(savedTheme, false);
+  document.querySelectorAll('input[name="theme"]').forEach(r => r.checked = r.value === savedTheme);
+}
+function persistSettings() { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); }
+function applyTheme(name, save=true) {
+  body.setAttribute('data-theme', name);
+  themeSwitch.setAttribute('data-on', name === 'dark' ? 'true' : 'false');
+  themeSwitch.setAttribute('aria-checked', name === 'dark' ? 'true' : 'false');
+  if (save) localStorage.setItem(THEME_KEY, name);
 }
 
-function savePendingOperations() {
-  localStorage.setItem(PENDING_KEY, JSON.stringify(pendingOperations));
-}
-
-function addPendingOperation(operation) {
-  pendingOperations.push({
-    id: uid(),
-    timestamp: Date.now(),
-    ...operation
-  });
-  savePendingOperations();
-}
-
-// ===============================
-// Sync Functions
-// ===============================
-
-async function syncWithServer() {
-  if (!isOnline || syncInProgress || !settings.onlineSync) return;
-  
-  syncInProgress = true;
-  console.log('Starting sync...');
-
-  try {
-    await processPendingOperations();
-    const serverEntries = await fetchEntriesFromAPI();
-    const localMap = new Map(entries.map(e => [e.id, e]));
-    const merged = [];
-
-    for (const serverEntry of serverEntries) {
-      merged.push(serverEntry);
-    }
-
-    for (const localEntry of entries) {
-      if (!merged.find(e => e.id === localEntry.id) && 
-          !pendingOperations.find(op => op.entryId === localEntry.id)) {
-        merged.push(localEntry);
-      }
-    }
-
-    entries = merged;
-    saveToCache();
-    
-    localStorage.setItem(LAST_SYNC, Date.now().toString());
-    console.log('Sync completed successfully');
-    
-    renderEntries(searchText.value);
-    renderStats();
-  } catch (error) {
-    console.error('Sync failed:', error);
-  } finally {
-    syncInProgress = false;
-  }
-}
-
-async function processPendingOperations() {
-  if (pendingOperations.length === 0) return;
-
-  const operations = [...pendingOperations];
-  const processedIds = [];
-
-  for (const op of operations) {
-    try {
-      switch (op.type) {
-        case 'create':
-          await createEntryAPI(op.data);
-          processedIds.push(op.id);
-          break;
-        
-        case 'update':
-          await updateEntryAPI(op.entryId, op.data);
-          processedIds.push(op.id);
-          break;
-        
-        case 'delete':
-          await deleteEntryAPI(op.entryId);
-          processedIds.push(op.id);
-          break;
-      }
-    } catch (error) {
-      console.error(`Failed to process operation ${op.id}:`, error);
-
-    }
-  }
-
-  pendingOperations = pendingOperations.filter(op => !processedIds.includes(op.id));
-  savePendingOperations();
-}
-
-// ===============================
-// Entry Management
-// ===============================
-
-function createEntry(text) {
-  const now = Date.now();
-  const entry = { 
-    id: uid(), 
-    createdAt: now, 
-    updatedAt: now, 
-    conversation: [{ role: 'user', text }]
-  };
-
-  entries.push(entry);
-  saveToCache();
-
-  if (isOnline && settings.onlineSync) {
-    createEntryAPI(entry).catch(err => {
-      console.error('Failed to create entry on server:', err);
-      addPendingOperation({ type: 'create', data: entry });
-    });
-  } else if (settings.onlineSync) {
-    addPendingOperation({ type: 'create', data: entry });
-  }
-
-  return entry;
-}
-
-function updateEntry(id, text) {
-  const entry = entries.find(x => x.id === id);
-  if (!entry) return null;
-
-  entry.conversation = [{ role: 'user', text }];
-  entry.updatedAt = Date.now();
-  
-  saveToCache();
-
-  if (isOnline && settings.onlineSync) {
-    updateEntryAPI(id, entry).catch(err => {
-      console.error('Failed to update entry on server:', err);
-      addPendingOperation({ type: 'update', entryId: id, data: entry });
-    });
-  } else if (settings.onlineSync) {
-    addPendingOperation({ type: 'update', entryId: id, data: entry });
-  }
-
-  return entry;
-}
-
-function deleteEntry(id) {
-  entries = entries.filter(x => x.id !== id);
-  saveToCache();
-
-  if (isOnline && settings.onlineSync) {
-    deleteEntryAPI(id).catch(err => {
-      console.error('Failed to delete entry on server:', err);
-      addPendingOperation({ type: 'delete', entryId: id });
-    });
-  } else if (settings.onlineSync) {
-    addPendingOperation({ type: 'delete', entryId: id });
-  }
-}
-
-// ===============================
-// UI Functions
-// ===============================
-
-function showToast(msg) {
-  toastMessage.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
+/* Notification badge */
 function updateNotificationBadge() {
-  const count = entries.length;
+  const count = pending.length;
   if (count > 0) {
     journalBadge.textContent = count;
     journalBadge.style.display = 'block';
@@ -501,431 +295,225 @@ function updateNotificationBadge() {
   }
 }
 
-function renderStats() {
-  statsContainer.style.display = 'none';
+/* GitHub fetch with ETag caching */
+async function fetchEntriesFromGitHub() {
+  const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+  const etag = localStorage.getItem(ETAG_KEY);
+  const headers = {};
+  if (etag) headers['If-None-Match'] = etag;
+
+  try {
+    const res = await fetch(GITHUB_API_CONTENTS, { headers });
+    if (res.status === 304) {
+      entries = cached || [];
+      renderEntries(searchText.value);
+      return;
+    }
+    if (!res.ok) throw new Error('GitHub API error ' + res.status);
+    const list = await res.json();
+    const files = await Promise.all(list.map(async f => {
+      try {
+        if (!f.download_url) return null;
+        const r = await fetch(f.download_url);
+        if (!r.ok) return null;
+        const text = await r.text();
+        return { id: f.name, path: f.path, text, sha: f.sha, updatedAt: f.sha };
+      } catch(e) { return null; }
+    }));
+    entries = files.filter(Boolean).sort((a,b)=> a.id.localeCompare(b.id));
+    localStorage.setItem(CACHE_KEY, JSON.stringify(entries));
+    const newEtag = res.headers.get('etag');
+    if (newEtag) localStorage.setItem(ETAG_KEY, newEtag);
+    renderEntries(searchText.value);
+  } catch (err) {
+    console.error('Failed to fetch entries from GitHub', err);
+    entries = cached || [];
+    renderEntries(searchText.value);
+  }
 }
 
-function renderEntries(filter = '') {
+/* Render entries */
+function renderEntries(filter='') {
   moduleEntries.style.display = 'flex';
   moduleEntries.innerHTML = '';
-  
   const list = entries.slice().reverse().filter(e => {
     if (!filter) return true;
-    const hay = e.conversation.map(c => c.text).join(' ').toLowerCase();
-    const entryDate = new Date(e.createdAt);
-    const title = entryDate.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    }).toLowerCase();
-    return hay.includes(filter.toLowerCase()) || title.includes(filter.toLowerCase());
+    return (e.text||'').toLowerCase().includes(filter.toLowerCase()) || (e.id||'').toLowerCase().includes(filter.toLowerCase());
   });
-
   if (list.length === 0) {
-    moduleEntries.innerHTML = `
-      <div class="empty-state">
-        <div class="material-icons">mood</div>
-        <p>${filter ? 'No matching entries found' : 'No entries yet, please share your thoughts.'}</p>
-      </div>
-    `;
+    moduleEntries.innerHTML = `<div class="empty-state"><div class="material-icons">mood</div><p>${filter ? 'No matching entries found' : 'No entries yet, please share your thoughts.'}</p></div>`;
     return;
   }
-
   list.forEach(entry => {
-    const el = document.createElement('div');
-    el.className = 'entry';
-    
-    const entryDate = new Date(entry.createdAt);
-    const title = entryDate.toLocaleDateString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
-    const fullText = entry.conversation.map(c => c.text).join('\n\n');
-    
-    const meta = document.createElement('div');
-    meta.className = 'meta';
-    meta.innerHTML = `
-      <div class="title">${title}</div>
-    `;
-
-    const content = document.createElement('div');
-    content.className = 'content';
-    content.textContent = fullText;
-
-    const actions = document.createElement('div');
-    actions.className = 'actions';
-
-    const expand = document.createElement('button');
-    expand.className = 'btn';
-    expand.textContent = 'Read More';
-    expand.onclick = () => {
-      content.classList.toggle('expanded');
-      expand.textContent = content.classList.contains('expanded') ? 'Show Less' : 'Read More';
-    };
-
-    const edit = document.createElement('button');
-    edit.className = 'btn';
-    edit.textContent = 'Edit';
-    edit.onclick = () => openEditModal(entry.id);
-
-    const del = document.createElement('button');
-    del.className = 'btn danger';
-    del.textContent = 'Delete';
-    del.onclick = () => { 
-      if(confirm('Delete this entry?')) { 
-        deleteEntry(entry.id);
-        renderEntries(searchText.value);
-        renderStats();
-        showToast('Entry deleted');
-      } 
-    };
-
-    actions.appendChild(expand);
-    actions.appendChild(edit);
-    actions.appendChild(del);
-
-    el.appendChild(meta);
-    el.appendChild(content);
-    el.appendChild(actions);
+    const el = document.createElement('div'); el.className = 'entry';
+    const meta = document.createElement('div'); meta.className = 'meta';
+    const title = document.createElement('div'); title.className = 'title'; title.textContent = entry.id;
+    const date = document.createElement('div'); date.className = 'date'; date.textContent = entry.updatedAt ? `sha:${entry.updatedAt.slice(0,7)}` : '';
+    meta.appendChild(title); meta.appendChild(date);
+    const content = document.createElement('div'); content.className = 'content'; content.textContent = entry.text || '';
+    const actions = document.createElement('div'); actions.className = 'actions';
+    const expand = document.createElement('button'); expand.className = 'btn'; expand.textContent = 'Read More';
+    expand.onclick = () => { content.classList.toggle('expanded'); expand.textContent = content.classList.contains('expanded') ? 'Show Less' : 'Read More'; };
+    const edit = document.createElement('button'); edit.className = 'btn'; edit.textContent = 'Edit';
+    edit.onclick = () => showToast('Editing remote GitHub entries is not supported from the client');
+    const del = document.createElement('button'); del.className = 'btn danger'; del.textContent = 'Delete';
+    del.onclick = () => showToast('Deleting remote GitHub entries is not supported from the client');
+    actions.appendChild(expand); actions.appendChild(edit); actions.appendChild(del);
+    el.appendChild(meta); el.appendChild(content); el.appendChild(actions);
     moduleEntries.appendChild(el);
   });
 }
 
-function openEditModal(id) {
-  const entry = entries.find(x => x.id === id);
-  if (!entry) return;
-  
-  currentEditId = id;
-  editText.value = entry.conversation.map(c => c.text).join('\n\n');
-  editModal.style.display = 'flex';
+/* Queue and submit to Google Form */
+function queueSubmission(name, text) {
+  const item = { id: uid(), name: name || 'Client', text, ts: Date.now(), attempts: 0 };
+  pending.push(item);
+  savePending();
+  tryProcessPending();
+  showToast('Queued for submission');
 }
 
-// ===============================
-// Settings Management
-// ===============================
+async function tryProcessPending() {
+  if (!navigator.onLine) return;
+  if (!pending.length) return;
+  if (!settings.onlineSync) return;
 
-function loadSettings() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(SETTINGS));
-    settings = saved || { autoSave: false, onlineSync: true };
-    if (saved && settings.onlineSync === undefined) {
-      settings.onlineSync = true;
+  // iterate copy to allow mutation
+  const ops = [...pending];
+  for (const op of ops) {
+    let ok = false;
+
+    // Try Apps Script proxy first if configured
+    if (APPS_SCRIPT_PROXY) {
+      try {
+        const r = await fetch(APPS_SCRIPT_PROXY, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: op.name, text: op.text })
+        });
+        ok = r.ok;
+      } catch (e) {
+        ok = false;
+      }
     }
-  } catch(e) {
-    settings = { autoSave: false, onlineSync: true };
+
+    // Fallback: direct POST to Google Forms (may be blocked by CORS)
+    if (!ok) {
+      try {
+        const body = new URLSearchParams();
+        body.set(FORM_FIELDS.name, op.name);
+        body.set(FORM_FIELDS.text, op.text);
+        // Attempt with CORS mode; if blocked, try no-cors as last resort
+        try {
+          const r = await fetch(FORM_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body.toString(),
+            mode: 'cors'
+          });
+          ok = r.ok || r.status === 0 || r.status === 200 || r.status === 302;
+        } catch (err) {
+          // try no-cors fallback (opaque response)
+          try {
+            await fetch(FORM_ENDPOINT, {
+              method: 'POST',
+              body: body.toString(),
+              mode: 'no-cors'
+            });
+            ok = true;
+          } catch (err2) {
+            ok = false;
+          }
+        }
+      } catch (e) {
+        ok = false;
+      }
+    }
+
+    if (ok) {
+      pending = pending.filter(p => p.id !== op.id);
+      savePending();
+      showToast('Submitted entry');
+      // allow time for server-side automation to publish to GitHub
+      setTimeout(fetchEntriesFromGitHub, 2000);
+    } else {
+      op.attempts = (op.attempts || 0) + 1;
+      // keep in queue; backoff could be added
+    }
   }
-  
-  const savedTheme = localStorage.getItem(THEME) || 'light';
-  applyTheme(savedTheme, false);
-  
-  autoSaveCheck.checked = settings.autoSave;
-  onlineSyncCheck.checked = settings.onlineSync;
-  
-  document.querySelectorAll('input[name="theme"]').forEach(radio => {
-    radio.checked = radio.value === savedTheme;
-  });
 }
 
-function persistSettings() {
-  localStorage.setItem(SETTINGS, JSON.stringify(settings));
-}
-
-function applyTheme(name, saveToStorage = true) {
-  body.setAttribute('data-theme', name);
-  themeSwitch.setAttribute('data-on', name === 'dark' ? 'true' : 'false');
-  themeSwitch.setAttribute('aria-checked', name === 'dark' ? 'true' : 'false');
-  if (saveToStorage) {
-    localStorage.setItem(THEME, name);
-  }
-  document.querySelectorAll('input[name="theme"]').forEach(radio => {
-    radio.checked = radio.value === name;
-  });
-}
-
-// ===============================
-// Voice Recognition
-// ===============================
-
-let recognition = null;
-let recognizing = false;
-
-function setupRecognition() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) return null;
-  const r = new SR();
-  r.lang = navigator.language || 'en-US';
-  r.continuous = false;
-  r.interimResults = true;
-  r.onstart = () => { 
-    recognizing = true; 
-    mic.classList.add('recording');
-  };
-  r.onend = () => { 
-    recognizing = false; 
-    mic.classList.remove('recording');
-  };
-  r.onerror = (e) => { 
-    recognizing = false; 
-    mic.classList.remove('recording');
-    if (e.error !== 'no-speech' && e.error !== 'aborted') {
-      showToast('Voice recognition error: ' + e.error);
-    }
-  };
-  r.onresult = (ev) => {
-    let transcript = '';
-    for (let i = 0; i < ev.results.length; i++) {
-      transcript += ev.results[i][0].transcript;
-    }
-    entryText.value = transcript;
-    entryText.style.height = 'auto';
-    entryText.style.height = Math.min(entryText.scrollHeight, 360) + 'px';
-  };
-  return r;
-}
-
-// ===============================
-// Event Listeners
-// ===============================
-
-entryText.addEventListener('input', function() {
-  this.style.height = 'auto';
-  this.style.height = Math.min(this.scrollHeight, 360) + 'px';
-});
-
+/* UI wiring */
 btnNew.addEventListener('click', () => {
-  moduleNew.style.display = 'block';
+  const visible = moduleNew.style.display === 'block';
+  moduleNew.style.display = visible ? 'none' : 'block';
   moduleSearch.style.display = 'none';
-  moduleEntries.style.display = 'none';
-  statsContainer.style.display = 'none';
-  entryText.focus();
+  if (!visible) entryName.focus();
 });
-
-save.addEventListener('click', () => {
-  const txt = entryText.value.trim();
-  if (!txt) return;
-  
-  createEntry(txt);
-  entryText.value = '';
-  entryText.style.height = 'auto';
-  showToast('Entry saved successfully!');
-  renderEntries();
-  renderStats();
-  moduleNew.style.display = 'none';
-});
-
-function autoSaveEntry() {
-  const txt = entryText.value.trim();
-  if (!txt) return;
-  
-  createEntry(txt);
-  entryText.value = '';
-  entryText.style.height = 'auto';
-  showToast('Entry auto-saved');
-
-}
-
 btnSearch.addEventListener('click', () => {
-  moduleSearch.style.display = 'block';
+  const visible = moduleSearch.style.display === 'block';
+  moduleSearch.style.display = visible ? 'none' : 'block';
   moduleNew.style.display = 'none';
-  moduleEntries.style.display = 'none';
-  statsContainer.style.display = 'none';
-  searchText.focus();
+  if (!visible) searchText.focus();
 });
-
-searchText.addEventListener('input', (e) => {
-  renderEntries(e.target.value);
-  renderStats();
+saveBtn.addEventListener('click', () => {
+  const text = (entryText.value || '').trim();
+  const name = (entryName.value || '').trim() || 'Client';
+  if (!text) { showToast('Please enter something'); return; }
+  queueSubmission(name, text);
+  entryText.value = '';
 });
+searchText.addEventListener('input', (e) => renderEntries(e.target.value));
+clearSearch.addEventListener('click', () => { searchText.value = ''; renderEntries(''); });
 
-clearSearch.addEventListener('click', () => { 
-  searchText.value = ''; 
-  renderEntries();
-  renderStats();
-});
+settingsBtn.addEventListener('click', () => { settingsModal.style.display = 'flex'; settingsModal.setAttribute('aria-hidden','false'); });
+closeSettings.addEventListener('click', () => { settingsModal.style.display = 'none'; settingsModal.setAttribute('aria-hidden','true'); });
+closeEdit.addEventListener('click', () => { editModal.style.display = 'none'; editModal.setAttribute('aria-hidden','true'); });
+saveEdit.addEventListener('click', () => showToast('Editing remote GitHub entries is not supported from the client'));
 
-btnJournal.addEventListener('click', () => {
-  moduleNew.style.display = 'none';
-  moduleSearch.style.display = 'none';
-  renderEntries();
-  renderStats();
-});
+autoSaveCheck.addEventListener('change', (e) => { settings.autoSave = e.target.checked; persistSettings(); });
+onlineSyncCheck.addEventListener('change', (e) => { settings.onlineSync = e.target.checked; persistSettings(); if (settings.onlineSync) tryProcessPending(); });
 
-saveEdit.addEventListener('click', () => {
-  const text = editText.value.trim();
-  if (!text) return;
-  
-  updateEntry(currentEditId, text);
-  editModal.style.display = 'none';
-  renderEntries(searchText.value);
-  showToast('Entry updated!');
-});
-
-closeEdit.addEventListener('click', () => {
-  editModal.style.display = 'none';
+themeSwitch.addEventListener('click', () => {
+  const current = body.getAttribute('data-theme') || 'light';
+  const next = current === 'light' ? 'dark' : 'light';
+  applyTheme(next, true);
 });
 
 exportBtn.addEventListener('click', () => {
-  const data = JSON.stringify(entries, null, 2);
-  const blob = new Blob([data], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `innermind-export-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-  showToast('Entries exported!');
-  settingsModal.style.display = 'none';
-});
-
-clearBtn.addEventListener('click', async () => {
-  if (confirm('Are you sure you want to delete ALL entries? This cannot be undone!')) {
-    const entriesToDelete = [...entries];
-    entries = [];
-    saveToCache();
-    
-    if (settings.onlineSync) {
-      for (const entry of entriesToDelete) {
-        if (isOnline) {
-          deleteEntryAPI(entry.id).catch(err => {
-            console.error('Failed to delete entry on server:', err);
-            addPendingOperation({ type: 'delete', entryId: entry.id });
-          });
-        } else {
-          addPendingOperation({ type: 'delete', entryId: entry.id });
-        }
-      }
-    }
-    
-    renderEntries();
-    renderStats();
-    showToast('All entries cleared');
-    settingsModal.style.display = 'none';
+  try {
+    const data = JSON.stringify(entries || [], null, 2);
+    navigator.clipboard.writeText(data).then(()=> showToast('Entries copied to clipboard'));
+  } catch (e) {
+    showToast('Export failed');
   }
 });
 
-mic.addEventListener('click', () => {
-  if (!recognition) recognition = setupRecognition();
-  if (!recognition) { 
-    showToast('Voice recognition not supported in this browser'); 
-    return; 
-  }
-  if (!recognizing) {
-    try {
-      recognition.start();
-    } catch(e) {
-      showToast('Could not start voice recognition');
-    }
-  } else {
-    recognition.stop();
-  }
+clearBtn.addEventListener('click', () => {
+  if (!confirm('Clear local cache and pending submissions?')) return;
+  localStorage.removeItem(CACHE_KEY);
+  localStorage.removeItem(PENDING_KEY);
+  localStorage.removeItem(ETAG_KEY);
+  entries = [];
+  pending = [];
+  renderEntries('');
+  updateNotificationBadge();
+  showToast('Local data cleared');
 });
 
-themeSwitch.addEventListener('click', () => {
-  const isDark = themeSwitch.getAttribute('data-on') === 'true';
-  applyTheme(isDark ? 'light' : 'dark');
-});
+/* Network events */
+window.addEventListener('online', () => { showToast('Back online — syncing pending submissions'); tryProcessPending(); fetchEntriesFromGitHub(); });
+window.addEventListener('offline', () => { showToast('Offline — submissions will be queued'); });
 
-document.querySelectorAll('input[name="theme"]').forEach(radio => {
-  radio.addEventListener('change', (e) => {
-    if (e.target.checked) {
-      applyTheme(e.target.value);
-    }
-  });
-});
-
-autoSaveCheck.addEventListener('change', (e) => {
-  settings.autoSave = e.target.checked;
-  persistSettings();
-  showToast(settings.autoSave ? 'Auto-save enabled' : 'Auto-save disabled');
-});
-
-onlineSyncCheck.addEventListener('change', (e) => {
-  settings.onlineSync = e.target.checked;
-  persistSettings();
-  
-  if (settings.onlineSync && isOnline) {
-    showToast('Online syncing enabled - syncing now...');
-    syncWithServer();
-  } else {
-    showToast('Online syncing disabled - data stays local only');
-  }
-});
-
-settingsBtn.addEventListener('click', () => { 
-  settingsModal.style.display = 'flex'; 
-});
-
-closeSettings.addEventListener('click', () => { 
-  settingsModal.style.display = 'none'; 
-});
-
-settingsModal.addEventListener('click', (e) => {
-  if (e.target === settingsModal) {
-    settingsModal.style.display = 'none';
-  }
-});
-
-editModal.addEventListener('click', (e) => {
-  if (e.target === editModal) {
-    editModal.style.display = 'none';
-  }
-});
-
-let autoSaveTimeout;
-entryText.addEventListener('input', () => {
-  if (!settings.autoSave) return;
-  clearTimeout(autoSaveTimeout);
-  autoSaveTimeout = setTimeout(() => {
-    const txt = entryText.value.trim();
-    if (txt.length > 10) {
-      autoSaveEntry();
-    }
-  }, 3000);
-});
-
-window.addEventListener('online', () => {
-  isOnline = true;
-  console.log('Connection restored');
-  if (settings.onlineSync) {
-    showToast('Connection restored - syncing...');
-    syncWithServer();
-  }
-});
-
-window.addEventListener('offline', () => {
-  isOnline = false;
-  console.log('Connection lost - working offline');
-  if (settings.onlineSync) {
-    showToast('Working offline');
-  }
-});
-
-// ===============================
-// Initialization
-// ===============================
-
-async function initialize() {
+/* Init */
+function init() {
   loadSettings();
   loadFromCache();
-  loadPendingOperations();
-  updateNotificationBadge();
-  
-  if (isOnline && settings.onlineSync) {
-    syncWithServer();
-  }
-  
-  setInterval(() => {
-    if (isOnline && !syncInProgress && settings.onlineSync) {
-      syncWithServer();
-    }
-  }, 5 * 60 * 1000);
+  loadPending();
+  fetchEntriesFromGitHub();
+  setTimeout(tryProcessPending, 1000);
 }
-
-initialize();
-
+init();
 </script>
 </body>
 </html>
